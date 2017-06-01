@@ -2,13 +2,15 @@
 #include "Adafruit_MQTT.h"
 #include "Adafruit_MQTT_Client.h"
 
+// Change YOUR Wi-Fi SSID and Password below 
 const char* ssid     = "XXXX";
 const char* password = "XXXX";
 
+// Set MQTT Server, User name and password details below
 #define MQTT_SERVER      "XXX.XXX.XXX.XXX"
-#define MQTT_SERVERPORT  1883
 #define MQTT_USERNAME    "XXXX"
 #define MQTT_PASSWORD    "XXXX"
+#define MQTT_SERVERPORT  1883
 #define SUBSCRIBE_TOPIC  "/home/2cargarage/onoff"
 
 #define RELAY_PIN         16
@@ -43,6 +45,7 @@ void connect2WiFi()
   // set the baud rate
   Serial.begin(115200);
 
+  // Set the Pin mode to "Output" - This is required!
   pinMode(RELAY_PIN, OUTPUT);
   
   // wait for 10 milli seconds for it to initialize
@@ -60,7 +63,7 @@ void connect2WiFi()
   }
 
   Serial.println("");
-  Serial.println("WiFi connected");
+  Serial.println("WiFi Network is connected with the following.");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());  
 }
@@ -76,13 +79,13 @@ void loop() {
     // Check if its the onoff button feed
     if (subscription == &onoffbutton) 
     {
-      Serial.print(F("On-Off button: ")); Serial.println((char *)onoffbutton.lastread);
+      Serial.print(F("Relay Status: ")); Serial.println((char *)onoffbutton.lastread);
       
-      if (strcmp((char *)onoffbutton.lastread, "ON") == 0) 
+      if ( strcmp((char *)onoffbutton.lastread, "ON") == 0 || strcmp((char *)onoffbutton.lastread, "on") == 0)
       {
         digitalWrite(RELAY_PIN, LOW);
       }
-      if (strcmp((char *)onoffbutton.lastread, "OFF") == 0) 
+      if ( strcmp((char *)onoffbutton.lastread, "OFF") == 0 || strcmp((char *)onoffbutton.lastread, "off") == 0)
       {
         digitalWrite(RELAY_PIN, HIGH);
       }
