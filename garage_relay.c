@@ -88,6 +88,12 @@ void loop() {
       }
     }
   }
+  
+  // ping the server to keep the mqtt connection alive
+  if(! mqtt.ping()) {
+    mqtt.disconnect();
+  }  
+  
 }
 
 void MQTT_connect()
